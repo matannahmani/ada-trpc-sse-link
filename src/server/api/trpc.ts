@@ -13,8 +13,8 @@ import { type FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { headers } from "next/headers";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getServerAuthSession } from "~/server/auth";
-import { prisma } from "~/server/db";
+import { getServerAuthSession } from "@/server/auth";
+import { prisma } from "@/server/db";
 
 /**
  * 1. CONTEXT

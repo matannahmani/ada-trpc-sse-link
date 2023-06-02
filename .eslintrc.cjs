@@ -28,6 +28,8 @@ const config = {
         fixStyle: "inline-type-imports",
       },
     ],
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "no-unsafe-member-access": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-misused-promises": [
       2,

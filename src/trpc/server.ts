@@ -4,7 +4,7 @@ import { getUrl, transformer } from "./shared";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { experimental_createTRPCNextAppDirServer } from "@trpc/next/app-dir/server";
 import { headers } from "next/headers";
-import { type AppRouter } from "~/server/api/root";
+import { type AppRouter } from "@/server/api/root";
 
 export const api = experimental_createTRPCNextAppDirServer<AppRouter>({
   config() {

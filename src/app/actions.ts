@@ -1,8 +1,8 @@
 "use server";
 
 import * as z from "zod";
-import * as procs from "~/server/api/routers/post";
-import { createAction, protectedProcedure } from "~/server/api/trpc";
+import * as procs from "@/server/api/routers/post";
+import { createAction, protectedProcedure } from "@/server/api/trpc";
 
 /** You can import procedures from your api router. */
 export const createPost = createAction(procs.createPost);
@@ -14,7 +14,7 @@ export const editPost = createAction(
       z.object({
         id: z.string(),
         text: z.string().min(1),
-      }),
+      })
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.post.update({
@@ -25,5 +25,5 @@ export const editPost = createAction(
           text: input.text,
         },
       });
-    }),
+    })
 );
