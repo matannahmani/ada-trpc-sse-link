@@ -2,67 +2,111 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-    provider          = "sqlite"
-    url               = env("DATABASE_URL")
-}
-
-model Post {
-    id        String   @id @default(cuid())
-    text      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Chat              Chat[]
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Candidate {
+  // we will use ID to store information about the candidate in pinecone vector db
+  id        Int        @id @default(autoincrement())
+  name      String
+  party     String
+  image     String
+  aiModel   String? // Could represent the file or URL of the AI model for the chatbot (if we go with fine-tuning)
+  campaigns Campaign[]
+  Chat      Chat[]
+}
+
+model Chat {
+  id          Int        @id @default(autoincrement())
+  accountId   String
+  account     Account    @relation(fields: [accountId], references: [id])
+  candidateId Int?
+  candidate   Candidate? @relation(fields: [candidateId], references: [id])
+  campaignId  Int?
+  campaign    Campaign?  @relation(fields: [campaignId], references: [id])
+  messages    Message[]
+}
+
+/// this should also be stored in vector database for now we will use it as a reference to the pinecone
+model Message {
+  id        Int      @id @default(autoincrement())
+  content   String
+  timestamp DateTime @default(now())
+  chatId    Int
+  chat      Chat     @relation(fields: [chatId], references: [id])
+}
+
+model Campaign {
+  id             Int        @id @default(autoincrement())
+  title          String
+  description    String
+  candidateId    Int
+  totalDonations Float      @default(0) // better ways to do this but for now it's okay.
+  donationCap    Float      @default(1000) // max amount of donations allowed
+  donationCount  Int        @default(0) // number of donations
+  candidate      Candidate  @relation(fields: [candidateId], references: [id])
+  donations      Donation[]
+  Chat           Chat[]
+}
+
+model Donation {
+  id         Int      @id @default(autoincrement())
+  amount     Float
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  campaignId Int
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+  id            String     @id @default(cuid())
+  name          String?
+  email         String?    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  donations     Donation[]
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
 }
