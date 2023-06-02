@@ -1,5 +1,5 @@
-import { prisma } from "@/server/db";
-import type { Prisma } from "@prisma/client";
+import { PrismaClient, type Prisma } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const candidates: Prisma.CandidateCreateManyInput[] = [
   {
@@ -108,8 +108,12 @@ async function seedCampaigns() {
 }
 
 async function seed() {
+  console.log("Seeding database...");
+  console.log("Seeding candidates...");
   await seedCandidates();
+  console.log("Seeding campaigns...");
   await seedCampaigns();
+  console.log("Done seeding database.");
 }
 
 void seed();
