@@ -4,15 +4,23 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 import { Button } from "@ui/button";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const NavbarProfileMenu = () => {
   const session = useSession();
-  if (session) {
+  if (!session.data) {
     return (
-      <Button className="font-semibold" asChild={true}>
-        <Link href="login">Login</Link>
+      <Button onClick={() => signIn("google")} className="font-semibold">
+        <Image
+          className="mr-2"
+          src="/google.webp"
+          alt="Google Logo"
+          width={20}
+          height={20}
+        />
+        Login
       </Button>
     );
   }
