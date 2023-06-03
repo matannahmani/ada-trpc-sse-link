@@ -20,93 +20,68 @@ async function ChatPage({ params }: { params: { id: string } }) {
   return (
     // @ts-expect-error async component not support by typescript yet
     <AuthRequiredPage>
-      <div className="container max-w-full  lg:max-w-xl">
-        <h1 className="font-semibold">{candidate?.name}</h1>
-        <Separator className="my-2" />
-        <ScrollArea className="h-[540px] px-2 py-2">
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
-          </div>
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
-          </div>
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
-          </div>
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
-          </div>
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
-          </div>
-          <div className="flex gap-2 ">
-            <Avatar className="mr-2 h-12 w-12 rounded-sm">
-              <AvatarImage src={candidate?.image} className="object-cover" />
-            </Avatar>
-            <p>
-              Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
-              representing the {candidate?.party}. As a chatbot, I&apos;m here
-              to assist you and provide information about our campaign and
-              political agendas. Whether you have questions, concerns, or simply
-              want to learn more about what we do, feel free to ask. I&apos;m
-              here to help! So, hello Person {session?.user?.name}, how can I
-              assist you today?
-            </p>
+      <div className="mr-auto  max-w-full lg:max-w-xl">
+        <div className="w-fit px-2">
+          <h1 className="font-semibold">{candidate?.name}</h1>
+          <Separator className="my-2" />
+        </div>
+        <ScrollArea className="h-[calc(100vh-240px)] py-2 ">
+          <div
+            id="chat-container"
+            className=" [&>*:nth-child(even)]:bg-gray-800  [&>*:nth-child(odd)]:bg-background [&>*]:p-4"
+          >
+            <div className="flex gap-2">
+              <Avatar className="mr-2 h-12 w-12 rounded-sm">
+                <AvatarImage src={candidate?.image} className="object-cover" />
+              </Avatar>
+              <p>
+                Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
+                representing the {candidate?.party}. As a chatbot, I&apos;m here
+                to assist you and provide information about our campaign and
+                political agendas. Whether you have questions, concerns, or
+                simply want to learn more about what we do, feel free to ask.
+                I&apos;m here to help! So, hello Person {session?.user?.name},
+                how can I assist you today?
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Avatar className="mr-2 h-12 w-12 rounded-sm">
+                <AvatarImage
+                  src={session?.user.image}
+                  className="object-cover"
+                />
+              </Avatar>
+              <p>
+                Hello {candidate?.name}, I would like to know more about your
+                plan for climate changes.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Avatar className="mr-2 h-12 w-12 rounded-sm">
+                <AvatarImage src={candidate?.image} className="object-cover" />
+              </Avatar>
+              <p>
+                Hello and welcome! I&apos;m {candidate?.name}, and I&apos;m
+                representing the {candidate?.party}. As a chatbot, I&apos;m here
+                to assist you and provide information about our campaign and
+                political agendas. Whether you have questions, concerns, or
+                simply want to learn more about what we do, feel free to ask.
+                I&apos;m here to help! So, hello Person {session?.user?.name},
+                how can I assist you today?
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Avatar className="mr-2 h-12 w-12 rounded-sm">
+                <AvatarImage
+                  src={session?.user.image}
+                  className="object-cover"
+                />
+              </Avatar>
+              <p>
+                Hello {candidate?.name}, I would like to know more about your
+                plan for climate changes.
+              </p>
+            </div>
           </div>
         </ScrollArea>
         <div className="relative flex items-center shadow-xl">

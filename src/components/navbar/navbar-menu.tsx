@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Skeleton } from "@ui/skeleton";
+import { ChatSidebarTrigger } from "@/app/chat/candidate/[id]/sidebar";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,7 +42,7 @@ function NavbarMenu({
   );
 
   return (
-    <nav className="h-fit basis-full">
+    <nav className="z-40 h-fit basis-full">
       <Disclosure as="div" className="relative bg-gray-800">
         {({ open }) => (
           <>
@@ -60,6 +61,8 @@ function NavbarMenu({
                       <MenuIcon className="block h-6 w-6" aria-hidden="true" />
                     )}
                   </Disclosure.Button>
+                  {/* Trigger chat sidebar on mobile */}
+                  <ChatSidebarTrigger />
                 </div>
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">

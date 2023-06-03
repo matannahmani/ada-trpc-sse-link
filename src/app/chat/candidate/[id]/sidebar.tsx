@@ -1,65 +1,47 @@
-import {
-  LayoutGrid,
-  Library,
-  ListMusic,
-  Mic2,
-  Music,
-  Music2,
-  PlayCircle,
-  Radio,
-  User,
-} from "lucide-react";
+"use client";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { type Candidate } from "@prisma/client";
-import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
-import { api } from "@/trpc/server";
-import { Suspense } from "react";
-import { Skeleton } from "@ui/skeleton";
-import Link from "next/link";
-import SidebarCandidateBtn from "./sidebar-candidate-btn";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
+import { atom, useAtom } from "jotai";
+import { SidebarClose, SidebarOpen } from "lucide-react";
 
-async function ChatCandidateSidebar() {
-  const candidates = await api.candidates.list.query(undefined, {});
-  return candidates?.map((candidate, i) => (
-    <SidebarCandidateBtn candidateId={candidate.id} key={`btn-${i}`}>
-      <Link href={`/chat/candidate/${candidate.id}`} key={`link-${i}`}>
-        <Avatar className="mr-2 h-8 w-8">
-          <AvatarImage src={candidate.image} className="object-cover" />
-          <AvatarFallback>{candidate.name?.toLocaleUpperCase()}</AvatarFallback>
-        </Avatar>
-        {candidate.name}
-      </Link>
-    </SidebarCandidateBtn>
-  ));
-}
+type SidebarProps = {
+  children: React.ReactNode;
+};
 
-export function Sidebar({ className }: SidebarProps) {
+export const sidebarAtom = atom(false);
+
+export const ChatSidebarTrigger = () => {
+  const [isOpen, setIsOpen] = useAtom(sidebarAtom);
+  const [ref] = useAutoAnimate();
   return (
-    <div className={cn("pb-12", className)}>
-      <div className="">
-        <div className="py-2">
-          <h2 className="relative px-6 text-lg font-semibold tracking-tight">
-            Candidates
-          </h2>
-          <ScrollArea className="h-[540px] px-2">
-            <div className="space-y-1 p-2">
-              <Suspense
-                fallback={new Array(10).fill(0).map((_, i) => (
-                  <Skeleton className="h-[36px] w-full" key={`skeleton-${i}`} />
-                ))}
-              >
-                {/* @ts-expect-error async component not supported yet in ts */}
-                <ChatCandidateSidebar />
-              </Suspense>
-            </div>
-          </ScrollArea>
-        </div>
+    <div className="flex h-10 w-10 lg:hidden" ref={ref}>
+      <button onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <SidebarClose /> : <SidebarOpen />}
+      </button>
+    </div>
+  );
+};
+
+function Sidebar(props: SidebarProps) {
+  const [isOpen] = useAtom(sidebarAtom);
+
+  return (
+    <div className="relative">
+      <div
+        className={cn(
+          "fixed top-16 z-20 w-[70%] bg-gray-800",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+          "transition",
+          "flex flex-row",
+          "lg:static lg:mr-2 lg:w-[240px] lg:translate-x-0 lg:border-r-2 lg:bg-transparent lg:shadow-none "
+        )}
+      >
+        <div>{props.children}</div>
       </div>
     </div>
   );
 }
+
+export default Sidebar;

@@ -52,6 +52,7 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "jotai": "^2.1.1",
     "lucide-react": "0.105.0-alpha.4",
     "next": "^13.4.4",
     "next-auth": "^4.22.1",

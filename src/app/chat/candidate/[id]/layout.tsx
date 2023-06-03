@@ -1,15 +1,14 @@
-// sidebar | -> chat text
-
-import { Sidebar } from "./sidebar";
+import Sidebar from "./sidebar";
+import { SidebarContent } from "./sidebar-content";
 
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-row space-y-4 py-4">
-      <div className="w-[240px]">
-        <Sidebar />
-      </div>
+      <Sidebar>
+        <SidebarContent />
+      </Sidebar>
 
-      <div className="ml-2 w-full">{children}</div>
+      <div className="w-full lg:ml-2">{children}</div>
     </div>
   );
 };
