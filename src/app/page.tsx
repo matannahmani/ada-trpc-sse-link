@@ -2,18 +2,32 @@ import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { buttonVariants } from "@/components/ui/button";
+import CardsContainer from "./cards-container";
+import CandidateCard from "./candidate-card";
+import { Suspense } from "react";
+import { Skeleton } from "@ui/skeleton";
+import { api } from "@/trpc/server";
+
+const CandidatesCard = async () => {
+  const candidates = await api.candidates.list.query();
+  return candidates.map((candidate) => (
+    <CandidateCard key={`candidate-${candidate.id}`} candidate={candidate} />
+  ));
+};
 
 export default function IndexPage() {
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Beautifully designed components <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
+          Explore, Engage, Empower
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
+          Welcome to Ada-AI&apos;s hub of dynamic public figures. Browse through
+          candidates and their impactful campaigns, engage with personalized AI
+          chatbots, and lend your support to the causes that resonate with you.
+          Each click, each conversation, each contribution brings us one step
+          closer to a brighter future.
         </p>
       </div>
       <div className="flex gap-4">
@@ -23,7 +37,7 @@ export default function IndexPage() {
           rel="noreferrer"
           className={buttonVariants()}
         >
-          Documentation
+          View candidates
         </Link>
         <Link
           target="_blank"
@@ -31,9 +45,18 @@ export default function IndexPage() {
           href={siteConfig.links.github}
           className={buttonVariants({ variant: "outline" })}
         >
-          GitHub
+          View Campaigns
         </Link>
       </div>
+      <CardsContainer
+        title="Candidates"
+        description="Explore the top candidates."
+      >
+        <Suspense fallback={<Skeleton className="h-12 w-24 " />}>
+          {/* @ts-expect-error async component not support by typescript yet */}
+          <CandidatesCard />
+        </Suspense>
+      </CardsContainer>
     </section>
   );
 }
