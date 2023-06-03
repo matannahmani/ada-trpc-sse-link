@@ -2,14 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
-import { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import { Disclosure } from "@headlessui/react";
 import { X, Menu as MenuIcon } from "lucide-react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import NavbarProfileMenu from "./profile-menu";
 import Image from "next/image";
+import { Skeleton } from "@ui/skeleton";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -21,9 +21,19 @@ type Navigations = {
   current?: boolean;
 }[];
 
-function NavbarMenu({ navigation }: { navigation: Navigations }) {
+function NavbarMenu({
+  navigation,
+  profileComponent,
+}: {
+  /**
+   * @explaination NavbarProfileMenu is a rsc component which we stream down to NavbarMenu
+   * @see NavbarProfileMenu
+   */
+  profileComponent: React.ReactNode;
+  navigation: Navigations;
+}) {
   const [menuIconRef] = useAutoAnimate();
-  const [menuConRef, enableAnimations] = useAutoAnimate();
+  const [menuConRef] = useAutoAnimate();
   const pathname = usePathname();
   const currentPathIndex = useMemo(
     () => navigation.findIndex((nav) => nav.href === pathname),
@@ -87,8 +97,11 @@ function NavbarMenu({ navigation }: { navigation: Navigations }) {
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  {/* Profile dropdown */}
-                  <NavbarProfileMenu />
+                  <Suspense
+                    fallback={<Skeleton className="h-8 w-8 rounded-full" />}
+                  >
+                    {profileComponent}
+                  </Suspense>
                 </div>
               </div>
             </div>

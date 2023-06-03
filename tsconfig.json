@@ -27,6 +27,7 @@
     ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
+    "async-jsx.d.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
