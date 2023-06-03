@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AspectRatio } from "@ui/aspect-ratio";
+import Link from "next/link";
 
 type CandidateCardProps = {
   candidate: Candidate;
@@ -44,7 +45,9 @@ const CandidateCard = ({ candidate }: CandidateCardProps) => {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="ghost">View Candidate</Button>
-        <Button>Chat</Button>
+        <Button asChild>
+          <Link href={`/chat/candidate/${candidate.id}`}>Chat</Link>
+        </Button>
       </CardFooter>
     </Card>
   );

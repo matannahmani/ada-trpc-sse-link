@@ -52,7 +52,11 @@ export default function IndexPage() {
         title="Candidates"
         description="Explore the top candidates."
       >
-        <Suspense fallback={<Skeleton className="h-12 w-24 " />}>
+        <Suspense
+          fallback={new Array(10).fill(0).map((_, i) => (
+            <Skeleton className="h-[337px] w-[350px]" key={`skeleton-${i}`} />
+          ))}
+        >
           {/* @ts-expect-error async component not support by typescript yet */}
           <CandidatesCard />
         </Suspense>
