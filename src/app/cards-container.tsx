@@ -14,7 +14,7 @@ const CardsContainer = ({ ...props }: CardsContainerProps) => {
         <h2 className="text-2xl font-semibold tracking-tight">{props.title}</h2>
         <p className="text-sm text-muted-foreground">{props.description}</p>
       </div>
-      <Separator className="my-4" />
+      {/* <Separator /> */}
       <div className="relative overflow-hidden">
         <ScrollArea>
           <div className="flex space-x-4 pb-4">{props.children}</div>

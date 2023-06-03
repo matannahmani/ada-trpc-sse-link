@@ -1,6 +1,11 @@
 type NavbarRoute = {
   path: string | (() => string);
   i18nKey: string;
+  /**
+   * @default false
+   * @description If true, the user must be authenticated to view this route.
+   */
+  requiresAuth?: boolean;
   icon?: string;
   /**
    * @deprecated text will be removed in the future in favor of i18nKey
@@ -18,11 +23,13 @@ const NavbarRoutes: NavbarRoute[] = [
     path: "/chat",
     text: "Chat",
     i18nKey: "navbar.chat",
+    requiresAuth: true,
   },
   {
     path: "/donate",
     text: "Donate",
     i18nKey: "navbar.donate",
+    requiresAuth: true,
   },
   {
     path: "/mission",
