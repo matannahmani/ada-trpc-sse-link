@@ -26,7 +26,6 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Chat              Chat[]
 
   @@unique([provider, providerAccountId])
 }
@@ -52,22 +51,28 @@ model Candidate {
 
 model Chat {
   id          Int        @id @default(autoincrement())
-  accountId   String
-  account     Account    @relation(fields: [accountId], references: [id])
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
   candidateId Int?
   candidate   Candidate? @relation(fields: [candidateId], references: [id])
   campaignId  Int?
   campaign    Campaign?  @relation(fields: [campaignId], references: [id])
   messages    Message[]
+  accountId   String?
+
+  @@index([userId, candidateId], name: "candidate_user_chat_index")
 }
 
 /// this should also be stored in vector database for now we will use it as a reference to the pinecone
 model Message {
-  id        Int      @id @default(autoincrement())
-  content   String
-  timestamp DateTime @default(now())
-  chatId    Int
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  id         Int      @id @default(autoincrement())
+  content    String
+  timestamp  DateTime @default(now())
+  isResponse Boolean  @default(false)
+  chatId     Int
+  chat       Chat     @relation(fields: [chatId], references: [id])
+
+  @@index([chatId, timestamp], name: "chat_timestamp_index")
 }
 
 model Campaign {
@@ -101,6 +106,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   donations     Donation[]
+  Chat          Chat[]
 }
 
 model VerificationToken {

@@ -16,7 +16,7 @@ const ProfileMenuLogged = ({ session }: { session: Session }) => {
   return (
     <Menu as="div" className="relative ml-3">
       <div>
-        <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+        <Menu.Button className="flex rounded-full bg-background/80 text-sm backdrop-blur backdrop-blur focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
           <span className="sr-only">Open user menu</span>
           {session.user.image ? (
             // eslint-disable-next-line @next/next/no-img-element

@@ -11,8 +11,8 @@ function getBaseUrl() {
   return "http://localhost:3000";
 }
 
-export function getUrl() {
-  return getBaseUrl() + "/api/trpc";
+export function getUrl(pages?: boolean) {
+  return getBaseUrl() + `/api/trpc${pages ? "-stream" : ""}`;
 }
 
 /**

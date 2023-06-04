@@ -16,7 +16,7 @@ export const ChatSidebarTrigger = () => {
   const [isOpen, setIsOpen] = useAtom(sidebarAtom);
   const [ref] = useAutoAnimate();
   return (
-    <div className="flex h-10 w-10 lg:hidden" ref={ref}>
+    <div className="mx-2 flex h-10 w-10 lg:hidden" ref={ref}>
       <button onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <SidebarClose /> : <SidebarOpen />}
       </button>
@@ -31,7 +31,7 @@ function Sidebar(props: SidebarProps) {
     <div className="relative">
       <div
         className={cn(
-          "fixed top-16 z-20 w-[70%] bg-gray-800",
+          "fixed top-16 z-20 w-[70%] bg-background/80 backdrop-blur",
           isOpen ? "translate-x-0" : "-translate-x-full",
           "transition",
           "flex flex-row",

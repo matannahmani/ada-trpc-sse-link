@@ -15,6 +15,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { type Session } from "next-auth";
 
 /**
  * 1. CONTEXT
@@ -26,6 +27,10 @@ import { prisma } from "@/server/db";
 
 type CreateContextOptions = {
   headers: Headers;
+};
+
+export type CreateOldContextOptions = {
+  session: Session | null;
 };
 
 /**
