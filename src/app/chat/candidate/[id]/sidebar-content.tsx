@@ -16,7 +16,7 @@ async function ChatCandidateSidebar() {
       <Link href={`/chat/candidate/${candidate.id}`} key={`link-${i}`}>
         <Avatar className="mr-2 h-8 w-8">
           <AvatarImage src={candidate.image} className="object-cover" />
-          <AvatarFallback>{candidate.name?.toLocaleUpperCase()}</AvatarFallback>
+          {/* <AvatarFallback>{ca ndidate.name?.toLocaleUpperCase()}</AvatarFallback> */}
         </Avatar>
         {candidate.name}
       </Link>

@@ -9,8 +9,6 @@ import {
 } from "@trpc/next/app-dir/client";
 import { type AppRouter } from "@/server/api/root";
 import { httpSseLink } from "./stream-link";
-import { createNextApiHandler } from "@trpc/server/adapters/next";
-import { createTRPCNext } from "@trpc/next";
 
 export const api = experimental_createTRPCNextAppDirClient<AppRouter>({
   config() {

@@ -12,6 +12,7 @@ import { z } from "zod";
 // this package is only for now, streaming is a bit messed in offical sdk
 import { OpenAI } from "openai-streams";
 import { TRPCError } from "@trpc/server";
+import { env } from "@/env.mjs";
 
 /**
  * This is the primary router for your server.
@@ -132,7 +133,7 @@ export const candidatesRouter = createTRPCRouter({
         });
       }
       const { candidate } = chat;
-
+      const moreInformationKeyword = "**I need more information**";
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const data = await OpenAI(
         "chat",
@@ -142,14 +143,14 @@ export const candidatesRouter = createTRPCRouter({
               content: `You're acting as candidate: ${candidate.name} personalized chatbot,
               you're goal is to provide accuracte responses while taking in considiration the candidate opinion and party: ${candidate.party}
               A person is asking you: ${message}, what is your response?
-              in case of missing information you can ask for more information by saying: "I need more information"`,
+              in case of missing information you can ask for more information by saying: "${moreInformationKeyword}"`,
               role: "user",
             },
           ],
           model: "gpt-3.5-turbo",
         },
         {
-          apiKey: process.env.OPENAI_API_KEY,
+          apiKey: env.OPEN_AI_API_KEY,
           // mode: 'raw',
         }
       );

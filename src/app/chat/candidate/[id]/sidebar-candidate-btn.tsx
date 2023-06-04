@@ -10,7 +10,9 @@ const SidebarCandidateBtn = ({
   children: React.ReactNode;
   candidateId: number;
 }) => {
-  const { id } = useParams();
+  const { id } = useParams() as {
+    id: string;
+  };
   const currentCandidate = id;
 
   return (
