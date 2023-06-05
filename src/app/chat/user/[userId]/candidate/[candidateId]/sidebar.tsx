@@ -5,6 +5,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { atom, useAtom } from "jotai";
 import { SidebarClose, SidebarOpen } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { memo } from "react";
 
 type SidebarProps = {
@@ -14,11 +15,13 @@ type SidebarProps = {
 export const sidebarAtom = atom(false);
 
 export const ChatSidebarTrigger = () => {
+  const path = usePathname();
   const [isOpen, setIsOpen] = useAtom(sidebarAtom);
   const [ref] = useAutoAnimate();
+  if (!path.includes("chat") || !path.includes("candidate")) return null;
   return (
-    <div className="mx-2 flex h-10 w-10 lg:hidden" ref={ref}>
-      <button onClick={() => setIsOpen(!isOpen)}>
+    <div className="mx-2 flex h-10 w-10 lg:hidden">
+      <button ref={ref} onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <SidebarClose /> : <SidebarOpen />}
       </button>
     </div>
