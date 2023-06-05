@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Skeleton } from "@ui/skeleton";
 import { ChatSidebarTrigger } from "@/app/chat/user/[userId]/candidate/[candidateId]/sidebar";
+import { ThemeSwitcher } from "./theme-switcher";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -103,6 +104,8 @@ function NavbarMenu({
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <ThemeSwitcher />
+
                   <Suspense
                     fallback={<Skeleton className="h-8 w-8 rounded-full" />}
                   >
@@ -137,6 +140,7 @@ function NavbarMenu({
                       </Disclosure.Button>
                     );
                   })}
+                  <ThemeSwitcher />
                 </div>
               </Disclosure.Panel>
             </div>
