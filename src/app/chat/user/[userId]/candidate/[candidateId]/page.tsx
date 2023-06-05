@@ -7,6 +7,7 @@ import ChatBox from "./chatbox";
 import { ClientChatMessages } from "./chat-client-messages";
 import MessageBox from "./message-box";
 import MessageStream from "./message-stream";
+import { redirect } from "next/navigation";
 
 export const dynamic = "auto";
 // revaildate every 24 hours we will use next on demand revalidation endpoint on new messages
@@ -24,6 +25,12 @@ async function ChatPage({
     id: Number(params.candidateId),
   });
   const session = await getServerAuthSession();
+  if (!session && params.userId !== "-1") {
+    redirect(`/chat/user/-1/candidate/${params.candidateId}`);
+  }
+  if (session && params.userId !== session.user.id) {
+    redirect(`/chat/user/${session.user.id}/candidate/${params.candidateId}`);
+  }
   return (
     // @ts-expect-error async component not support by typescript yet
     <AuthRequiredPage>
