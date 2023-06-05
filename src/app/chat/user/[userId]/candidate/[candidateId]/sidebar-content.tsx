@@ -17,7 +17,11 @@ import { getServerAuthSession } from "@/server/auth";
  * @experimental trying to use rsc offical cache api
  */
 export const getCandidates = cache(async () => {
-  const candidates = await api.candidates.list.query(undefined, {});
+  const candidates = await api.candidates.list.query(undefined, {
+    context: {
+      revalidate: false,
+    },
+  });
   return candidates;
 });
 

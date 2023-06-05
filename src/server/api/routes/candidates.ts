@@ -13,7 +13,8 @@ import { z } from "zod";
 import { OpenAI } from "openai-streams";
 import { TRPCError } from "@trpc/server";
 import { env } from "@/env.mjs";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { generateCacheTag } from "@/trpc/shared";
 
 /**
  * This is the primary router for your server.
@@ -186,9 +187,11 @@ export const candidatesRouter = createTRPCRouter({
           ],
         });
         // we revalidate the path on demand after every message.
-        // revalidatePath(
-        //   `chat/user/${ctx.session.user.id}/candidate/${candidateId}`
-        // );
+        revalidateTag(
+          generateCacheTag("candidates.chatHistory", {
+            candidateId,
+          })
+        );
         sub.complete();
       });
     }),

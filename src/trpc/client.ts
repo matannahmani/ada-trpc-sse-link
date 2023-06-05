@@ -9,20 +9,23 @@ import {
 } from "@trpc/next/app-dir/client";
 import { type AppRouter } from "@/server/api/root";
 import { httpSseLink } from "./stream-link";
+import { nextFetchLink } from "./next-fetch-link";
 
 export const api = experimental_createTRPCNextAppDirClient<AppRouter>({
   config() {
     return {
       transformer,
       links: [
-        loggerLink({
-          enabled: (op) =>
-            process.env.NODE_ENV === "development" ||
-            (op.direction === "down" && op.result instanceof Error),
-        }),
-        httpBatchLink({
+        // loggerLink({
+        //   enabled: (op) =>
+        //     process.env.NODE_ENV === "development" ||
+        //     (op.direction === "down" && op.result instanceof Error),
+        // }),
+        nextFetchLink({
+          batch: false,
           url: getUrl(),
-          headers() {
+          headers(ctx) {
+            console.log(ctx.op.context);
             return {
               "x-trpc-source": "client",
             };
