@@ -1,11 +1,10 @@
 "use server";
 
 import { generateCacheTag, getUrl, transformer } from "./shared";
-import { httpBatchLink, httpLink, loggerLink } from "@trpc/client";
+import { httpLink } from "@trpc/client";
 import { experimental_createTRPCNextAppDirServer } from "@trpc/next/app-dir/server";
 import { headers } from "next/headers";
 import { type AppRouter } from "@/server/api/root";
-import { nextFetchLink } from "./next-fetch-link";
 
 export const api = experimental_createTRPCNextAppDirServer<AppRouter>({
   config() {

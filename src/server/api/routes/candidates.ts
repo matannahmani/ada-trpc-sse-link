@@ -187,11 +187,15 @@ export const candidatesRouter = createTRPCRouter({
           ],
         });
         // we revalidate the path on demand after every message.
-        revalidateTag(
-          generateCacheTag("candidates.chatHistory", {
-            candidateId,
-          })
-        );
+        try {
+          revalidateTag(
+            generateCacheTag("candidates.chatHistory", {
+              candidateId,
+            })
+          );
+        } catch (err) {
+          console.error(err);
+        }
         sub.complete();
       });
     }),
