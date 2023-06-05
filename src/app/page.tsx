@@ -38,7 +38,7 @@ export default function IndexPage() {
       </div>
       <div className="flex gap-4">
         <Link
-          href={siteConfig.links.docs}
+          href={"#candidate-container"}
           target="_blank"
           rel="noreferrer"
           className={buttonVariants()}
@@ -48,7 +48,7 @@ export default function IndexPage() {
         <Link
           target="_blank"
           rel="noreferrer"
-          href={siteConfig.links.github}
+          href={"#"}
           className={buttonVariants({ variant: "outline" })}
         >
           View Campaigns

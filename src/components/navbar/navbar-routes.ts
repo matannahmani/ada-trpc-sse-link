@@ -20,19 +20,19 @@ const NavbarRoutes: NavbarRoute[] = [
     i18nKey: "navbar.home",
   },
   {
-    path: "/chat",
+    path: "#",
     text: "Chat",
     i18nKey: "navbar.chat",
     requiresAuth: true,
   },
   {
-    path: "/donate",
+    path: "#",
     text: "Donate",
     i18nKey: "navbar.donate",
     requiresAuth: true,
   },
   {
-    path: "/mission",
+    path: "#",
     text: "Our Mission",
     i18nKey: "navbar.ourMission",
   },

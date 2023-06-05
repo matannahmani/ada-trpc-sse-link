@@ -10,7 +10,7 @@ type CardsContainerProps = {
 const CardsContainer = ({ ...props }: CardsContainerProps) => {
   return (
     <>
-      <div className="mt-6 space-y-1">
+      <div id="candidate-container" className="mt-6 space-y-1">
         <h2 className="text-2xl font-semibold tracking-tight">{props.title}</h2>
         <p className="text-sm text-muted-foreground">{props.description}</p>
       </div>
