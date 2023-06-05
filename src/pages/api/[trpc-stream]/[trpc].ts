@@ -92,20 +92,20 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
 
       response.on("close", () => {
         console.error("response closed");
-        subscription?.unsubscribe();
+        // subscription?.unsubscribe();
       });
       response.on("abort", () => {
         console.error("response aborted");
-        subscription?.unsubscribe();
+        // subscription?.unsubscribe();
       });
 
       request.on("close", () => {
         console.error("request closed");
-        subscription?.unsubscribe();
+        // subscription?.unsubscribe();
       });
       request.on("end", () => {
         console.error("request ended");
-        subscription?.unsubscribe();
+        // subscription?.unsubscribe();
       });
       request.on("error", () => console.error("request error"));
       request.on("pause", () => console.log("request paused"));
