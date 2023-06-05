@@ -29,7 +29,9 @@ export const ChatHistorySyncer = () => {
    * if they are not the same we will clear the client messages as we load the new messages from the server
    */
   useEffect(() => {
+    console.log("chatCandidateId", chatCandidateId);
     if (chatCandidateId !== params?.candidateId?.toString()) {
+      console.log("clearing messages from client");
       setChatCandidateId(params?.candidateId?.toString() || "");
       setChatMessages([]);
       setChatCompletionStatus("complete");

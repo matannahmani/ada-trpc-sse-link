@@ -52,6 +52,9 @@ export const useOnResponseComplete = () => {
   const appendMessageHandler = useCallback(() => {
     const prompt = readChatPrompt();
     const response = readChatResponse();
+    console.log("Append message handler");
+    console.log("prompt", prompt);
+    console.log("response", response);
     setClientMessages((prev) => {
       return [
         ...prev,

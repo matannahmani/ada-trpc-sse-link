@@ -2,10 +2,13 @@
 import { useAtomValue } from "jotai";
 import { ChatMessage, TChat } from "./message-box";
 import { chatMessagesAtom, messageKeyTemplate } from "./chat-utils";
+import { useEffect } from "react";
 
 export const ClientChatMessages = ({ ...props }: TChat) => {
   const messages = useAtomValue(chatMessagesAtom);
-
+  useEffect(() => {
+    console.log("messages", messages);
+  }, [messages]);
   return (
     <>
       {messages.map((message, index) => {
