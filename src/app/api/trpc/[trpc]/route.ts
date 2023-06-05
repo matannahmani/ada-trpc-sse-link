@@ -85,26 +85,30 @@ const handler = async (
       }
 
       // https://github.com/trpc/trpc/blob/7ad695ea33810a162808c43b6fba1fb920e05325/packages/server/src/http/resolveHTTPResponse.ts#L189-L193
-      const subscription = res.subscribe({
-        next(value) {
-          // https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
-          console.log("server subscription next", value);
-          void writer?.write(
-            encoder.encode(`event:data\ndata: ${JSON.stringify(value)}\n\n`)
-          );
-        },
-        error(err) {
-          console.log("server subscription error", err);
-          void writer.abort(err);
-          subscription?.unsubscribe();
-        },
-        complete() {
-          console.log("server subscription complete");
-          void writer.write(encoder.encode("event:end\ndata: {}\n\n"));
-          void writer.close();
-          subscription?.unsubscribe();
-        },
-      });
+      try {
+        const subscription = res.subscribe({
+          next(value) {
+            // https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
+            void writer?.write(
+              encoder.encode(`event:data\ndata: ${JSON.stringify(value)}\n\n`)
+            );
+          },
+          error(err) {
+            console.log("server subscription error", err);
+            void writer.abort(err);
+            // subscription?.unsubscribe();
+          },
+          complete() {
+            console.log("server subscription complete");
+            void writer.write(encoder.encode("event:end\ndata: {}\n\n"));
+            void writer.close();
+            // subscription?.unsubscribe();
+          },
+        });
+      } catch (err) {
+        console.log("server subscription error", err);
+        void writer.abort(err);
+      }
     } catch (error) {
       // https://github.com/trpc/trpc/blob/7ad695ea33810a162808c43b6fba1fb920e05325/packages/server/src/http/resolveHTTPResponse.ts#L198-L202
       console.error("Uncaught subscription error", error);

@@ -156,49 +156,52 @@ export const candidatesRouter = createTRPCRouter({
           // mode: 'raw',
         }
       );
-      let content = "";
+      const reader = data.getReader();
+      const decoder = new TextDecoder("utf-8");
 
-      // @ts-expect-error observable dosen't support async on typescript ~
-      return observable<string>(async (sub) => {
-        try {
-          // @ts-expect-error non support Uint8Array on typescript ~
-          for await (const chunk of data) {
-            const string = new TextDecoder().decode(chunk);
-            content += string;
-            sub.next(string);
+      let content = "";
+      let whileDecoding = true;
+      return observable<string>((sub) => {
+        (async () => {
+          while (whileDecoding) {
+            const { value, done } = await reader.read();
+            const decoded = decoder.decode(value);
+            content += decoded;
+            sub.next(decoded);
+            if (done) {
+              await prisma.message.createMany({
+                data: [
+                  // user message first
+                  {
+                    chatId: chat.id,
+                    content: message,
+                  },
+                  // bot message second
+                  {
+                    chatId: chat.id,
+                    content,
+
+                    isResponse: true,
+                  },
+                ],
+              });
+              //   // we revalidate the path on demand after every message.
+              //   // this is bugged on nextjs 14.4.4
+              //   // @see https://github.com/vercel/next.js/issues/50714
+              //   // try {
+              //   //   revalidateTag(
+              //   //     generateCacheTag("candidates.chatHistory", {
+              //   //       candidateId,
+              //   //     })
+              //   //   );
+              //   // } catch (err) {
+              //   //   console.error(err);
+              //   // }
+              whileDecoding = false;
+              sub.complete();
+            }
           }
-        } catch (err) {
-          console.error(err);
-          sub.error(err);
-        }
-        await prisma.message.createMany({
-          data: [
-            // user message first
-            {
-              chatId: chat.id,
-              content: message,
-            },
-            // bot message second
-            {
-              chatId: chat.id,
-              content,
-              isResponse: true,
-            },
-          ],
-        });
-        // we revalidate the path on demand after every message.
-        // this is bugged on nextjs 14.4.4
-        // @see https://github.com/vercel/next.js/issues/50714
-        // try {
-        //   revalidateTag(
-        //     generateCacheTag("candidates.chatHistory", {
-        //       candidateId,
-        //     })
-        //   );
-        // } catch (err) {
-        //   console.error(err);
-        // }
-        sub.complete();
+        })();
       });
     }),
 });

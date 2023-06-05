@@ -26,6 +26,7 @@ const ChatBox = () => {
   const setChatCompletionPrompt = useSetAtom(chatCompletionPromptAtom);
   const setChatCompletionRes = useSetAtom(chatCompletionResAtom);
   const params = useParams();
+  const router = useRouter();
   const appendMessageHandler = useOnResponseComplete();
 
   const onSubmitHandler = useCallback(
@@ -60,7 +61,7 @@ const ChatBox = () => {
           onError: (err) => {
             console.error(err);
             setChatCompletionStatus("error");
-
+            router.refresh();
             setIsLoading(false);
           },
         }
