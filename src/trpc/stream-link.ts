@@ -48,7 +48,7 @@ export const httpSseLink = <TRouter extends AnyRouter>(opts: {
 
     return {
       close: () => {
-        es.close();
+        es?.close();
       },
     };
   };
@@ -69,7 +69,7 @@ export const httpSseLink = <TRouter extends AnyRouter>(opts: {
 
       return observable((observer) => {
         const handleEvent = (data: /*json*/ any) => {
-          observer.next({ result: { type: "data", data }, context: {} });
+          observer?.next({ result: { type: "data", data }, context: {} });
         };
 
         const source = open({
@@ -79,20 +79,19 @@ export const httpSseLink = <TRouter extends AnyRouter>(opts: {
            * @explantion handle router client error
            */
           handleError: (error: TRPCClientError<AnyRouter>) => {
-            observer.error(error);
+            observer?.error(error);
           },
           handleCloseRequest: () => {
-            observer.next({ result: { type: "stopped" } });
-            observer.complete();
+            observer?.next({ result: { type: "stopped" } });
+            observer?.complete();
           },
           handleOpen: () => {
-            observer.next({ result: { type: "started" } });
+            observer?.next({ result: { type: "started" } });
           },
         });
 
         return () => {
-          console.log("something something");
-          source.close();
+          source?.close();
         };
       });
     };

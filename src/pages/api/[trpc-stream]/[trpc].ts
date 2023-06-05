@@ -56,20 +56,20 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
       const res = await procedure(call);
 
       if (!isObservable(res)) {
-        response.end();
+        response?.end();
         throw new Error(`subscription must return observable`);
       }
 
-      response.writeHead(200, {
+      response?.writeHead(200, {
         Connection: "keep-alive",
         "Cache-Control": "no-cache, no-transform",
         "Content-Type": "text/event-stream;charset=utf-8",
         "Access-Control-Allow-Origin": "*",
       });
-      response.flushHeaders();
+      response?.flushHeaders();
 
       // https://github.com/trpc/trpc/blob/7ad695ea33810a162808c43b6fba1fb920e05325/packages/server/src/http/resolveHTTPResponse.ts#L189-L193
-      const subscription = res.subscribe({
+      const subscription = res?.subscribe({
         /**
          *
          * @param value - the value of the observable (the data)
@@ -77,36 +77,36 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
          */
         next(value) {
           // https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
-          response.write(`event:data\ndata: ${JSON.stringify(value)}\n\n`);
+          response?.write(`event:data\ndata: ${JSON.stringify(value)}\n\n`);
         },
         error(err) {
           console.error("server subscription error", err);
-          response.end();
+          response?.end();
         },
         complete() {
-          response.end("event:end\ndata: {}\n\n");
+          response?.end("event:end\ndata: {}\n\n");
         },
       });
 
       response.on("close", () => {
-        subscription.unsubscribe();
+        subscription?.unsubscribe();
       });
       response.on("abort", () => {
-        subscription.unsubscribe();
+        subscription?.unsubscribe();
       });
 
       request.on("close", () => {
-        subscription.unsubscribe();
+        subscription?.unsubscribe();
       });
       request.on("end", () => {
-        subscription.unsubscribe();
+        subscription?.unsubscribe();
       });
       request.on("error", () => console.error("request error"));
       request.on("pause", () => console.log("request paused"));
     } catch (error) {
       // https://github.com/trpc/trpc/blob/7ad695ea33810a162808c43b6fba1fb920e05325/packages/server/src/http/resolveHTTPResponse.ts#L198-L202
       console.error("Uncaught subscription error", error);
-      response.end();
+      response?.end();
     }
     return;
   }
