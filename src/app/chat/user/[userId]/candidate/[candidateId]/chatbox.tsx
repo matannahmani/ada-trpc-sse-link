@@ -1,6 +1,6 @@
 "use client";
 
-import { streamApi } from "@/trpc/client";
+import { api } from "@/trpc/client";
 import {
   HoverCard,
   HoverCardTrigger,
@@ -35,7 +35,7 @@ const ChatBox = () => {
         return;
       }
       setIsLoading(true);
-      streamApi.candidates.chatComplete.subscribe(
+      api.candidates.chatComplete.subscribe(
         {
           candidateId: Number(params?.candidateId as string),
           message: text,

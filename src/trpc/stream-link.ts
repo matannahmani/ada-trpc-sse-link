@@ -31,12 +31,12 @@ export const httpSseLink = <TRouter extends AnyRouter>(opts: {
     };
 
     es.onerror = (error: unknown) => {
-      // if (error instanceof Error) {
-      //   handleError(new TRPCClientError(error.message));
-      //   return;
-      // }
-      // // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      // handleError(new TRPCClientError(`${error}`));
+      if (error instanceof Error) {
+        handleError(new TRPCClientError(error.message));
+        return;
+      }
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      handleError(new TRPCClientError(`${error}`));
     };
 
     es.addEventListener("data", ({ data }) => {
