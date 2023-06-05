@@ -187,15 +187,17 @@ export const candidatesRouter = createTRPCRouter({
           ],
         });
         // we revalidate the path on demand after every message.
-        try {
-          revalidateTag(
-            generateCacheTag("candidates.chatHistory", {
-              candidateId,
-            })
-          );
-        } catch (err) {
-          console.error(err);
-        }
+        // this is bugged on nextjs 14.4.4
+        // @see https://github.com/vercel/next.js/issues/50714
+        // try {
+        //   revalidateTag(
+        //     generateCacheTag("candidates.chatHistory", {
+        //       candidateId,
+        //     })
+        //   );
+        // } catch (err) {
+        //   console.error(err);
+        // }
         sub.complete();
       });
     }),
