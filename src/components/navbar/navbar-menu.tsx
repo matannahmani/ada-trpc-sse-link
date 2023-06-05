@@ -140,7 +140,6 @@ function NavbarMenu({
                       </Disclosure.Button>
                     );
                   })}
-                  <ThemeSwitcher />
                 </div>
               </Disclosure.Panel>
             </div>
