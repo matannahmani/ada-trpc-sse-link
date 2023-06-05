@@ -12,10 +12,10 @@ const SidebarCandidateBtn = memo(
     children: React.ReactNode;
     candidateId: number;
   }) => {
-    const { id } = useParams() as {
-      id: string;
+    const { candidateId: candidateIdParam } = useParams() as {
+      candidateId: string;
     };
-    const currentCandidate = id;
+    const currentCandidate = candidateIdParam;
 
     return (
       <Button

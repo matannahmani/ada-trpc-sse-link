@@ -8,30 +8,16 @@ import {
   HoverCardArrow,
 } from "@ui/hover-card";
 import { Textarea } from "@ui/textarea";
-import { atom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { Loader2, Send } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-
-/**
- * @description this is a atom will show the new message while it's beeing streamed
- */
-export const newMessageAtom = atom<{
-  text: string;
-  question: string;
-  reason?: string;
-  status: "error" | "streaming" | "complete" | "abort";
-}>({
-  text: "",
-  question: "",
-  status: "complete",
-});
-
-export const chatCompletionStatusAtom = atom<
-  "error" | "streaming" | "complete" | "abort"
->("complete");
-export const chatCompletionPromptAtom = atom<string>("");
-export const chatCompletionResAtom = atom<string>("");
+import {
+  chatCompletionStatusAtom,
+  chatCompletionPromptAtom,
+  chatCompletionResAtom,
+  useOnResponseComplete,
+} from "./chat-utils";
 
 const ChatBox = () => {
   const [text, setText] = useState("");
@@ -40,7 +26,7 @@ const ChatBox = () => {
   const setChatCompletionPrompt = useSetAtom(chatCompletionPromptAtom);
   const setChatCompletionRes = useSetAtom(chatCompletionResAtom);
   const params = useParams();
-  const router = useRouter();
+  const appendMessageHandler = useOnResponseComplete();
 
   const onSubmitHandler = useCallback(
     (text: string) => {
@@ -51,7 +37,7 @@ const ChatBox = () => {
       setIsLoading(true);
       streamApi.candidates.chatComplete.subscribe(
         {
-          candidateId: Number(params?.id as string),
+          candidateId: Number(params?.candidateId as string),
           message: text,
         },
         {
@@ -65,7 +51,7 @@ const ChatBox = () => {
           },
           onComplete: () => {
             setChatCompletionStatus("complete");
-            router.refresh();
+            appendMessageHandler();
             setIsLoading(false);
           },
           onStopped() {

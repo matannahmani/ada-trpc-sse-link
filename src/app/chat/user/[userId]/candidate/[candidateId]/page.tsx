@@ -4,11 +4,25 @@ import { api } from "@/trpc/server";
 import { ScrollArea } from "@ui/scroll-area";
 import { Separator } from "@ui/separator";
 import ChatBox from "./chatbox";
+import { ClientChatMessages } from "./chat-client-messages";
 import MessageBox from "./message-box";
 import MessageStream from "./message-stream";
 
-async function ChatPage({ params }: { params: { id: string } }) {
-  const candidate = await api.candidates.show.query({ id: Number(params.id) });
+export const dynamic = "auto";
+// revaildate every 24 hours we will use next on demand revalidation endpoint on new messages
+// export const revalidate = 86400;
+export const fetchCache = "auto";
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+
+async function ChatPage({
+  params,
+}: {
+  params: { userId: string; candidateId: string };
+}) {
+  const candidate = await api.candidates.show.query({
+    id: Number(params.candidateId),
+  });
   const session = await getServerAuthSession();
   return (
     // @ts-expect-error async component not support by typescript yet
@@ -23,10 +37,16 @@ async function ChatPage({ params }: { params: { id: string } }) {
             candidate={candidate}
             session={session as NonNullable<typeof session>}
           >
-            <MessageStream
-              candidate={candidate}
-              session={session as NonNullable<typeof session>}
-            />
+            <>
+              <ClientChatMessages
+                candidate={candidate}
+                session={session as NonNullable<typeof session>}
+              />
+              <MessageStream
+                candidate={candidate}
+                session={session as NonNullable<typeof session>}
+              />
+            </>
           </MessageBox>
         </ScrollArea>
         <ChatBox />

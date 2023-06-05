@@ -11,6 +11,7 @@ type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 import { cache } from "react";
 import Image from "next/image";
 import { AspectRatio } from "@ui/aspect-ratio";
+import { getServerAuthSession } from "@/server/auth";
 
 /**
  * @experimental trying to use rsc offical cache api
@@ -42,9 +43,13 @@ const MemoedCandidateImage = memo(function CandidateImage({
 
 async function ChatCandidateSidebar() {
   const candidates = await getCandidates();
+  const session = await getServerAuthSession();
   return candidates?.map((candidate, i) => (
     <SidebarCandidateBtn candidateId={candidate.id} key={`btn-${i}`}>
-      <Link href={`/chat/candidate/${candidate.id}`} key={`link-${i}`}>
+      <Link
+        href={`/chat/user/${session?.user.id ?? -1}/candidate/${candidate.id}`}
+        key={`link-${i}`}
+      >
         {/* <MemoedCandidateImage candidate={candidate} /> */}
         {candidate.name}
       </Link>

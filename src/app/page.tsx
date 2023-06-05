@@ -7,11 +7,17 @@ import CandidateCard from "./candidate-card";
 import { Suspense } from "react";
 import { Skeleton } from "@ui/skeleton";
 import { api } from "@/trpc/server";
+import { getServerAuthSession } from "@/server/auth";
 
 const CandidatesCard = async () => {
   const candidates = await api.candidates.list.query();
+  const session = await getServerAuthSession();
   return candidates.map((candidate) => (
-    <CandidateCard key={`candidate-${candidate.id}`} candidate={candidate} />
+    <CandidateCard
+      userId={session?.user?.id ?? "-1"}
+      key={`candidate-${candidate.id}`}
+      candidate={candidate}
+    />
   ));
 };
 

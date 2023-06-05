@@ -7,7 +7,7 @@ import { type Candidate } from "@prisma/client";
 import { Avatar, AvatarImage } from "@ui/avatar";
 import { Separator } from "@ui/separator";
 import type { Session } from "next-auth";
-import { Suspense, memo } from "react";
+import { Suspense, forwardRef, memo } from "react";
 
 export type TChat = {
   candidate: Candidate;
@@ -17,53 +17,50 @@ export type TChat = {
 const ChatAvatar = memo(({ image }: { image: string | undefined }) => {
   return (
     <Avatar className="mr-2 h-12 w-12 rounded-sm">
-      <AvatarImage
-        src={image}
-        className="object-cover"
-      />
+      <AvatarImage src={image} className="object-cover" />
     </Avatar>
   );
 });
 ChatAvatar.displayName = "ChatAvatar";
 
 const ChatMessageHeader = memo(({ name }: { name: string }) => {
-    return (
-        <div className="w-fit">
-        <p className="w-fit text-sm font-medium leading-none">{name}</p>
-        <Separator className="my-1" />
-      </div>
-    )
-})
+  return (
+    <div className="w-fit">
+      <p className="w-fit text-sm font-medium leading-none">{name}</p>
+      <Separator className="my-1" />
+    </div>
+  );
+});
 ChatMessageHeader.displayName = "ChatMessageHeader";
 
 const ChatMessageBody = memo(({ message }: { message: string }) => {
-    return <p>{message}</p>;
-    }
-)
+  return <p>{message}</p>;
+});
 ChatMessageBody.displayName = "ChatMessageBody";
 
-
-export const ChatMessage = ({
-  message,
-  image,
-  id,
-  name,
-}: {
+type ChatMessageProps = {
   id: string;
   image?: string;
   name: string;
   message: string;
-}) => {
-  return (
-    <div id={id} className="flex gap-2">
-        <ChatAvatar image={image}/>
-      <div>
-        <ChatMessageHeader name={name}/>
-        <ChatMessageBody message={message}/>
-      </div>
-    </div>
-  );
 };
+
+const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
+  ({ id, image, name, message }, ref) => {
+    return (
+      <div ref={ref} id={id} className="flex gap-2">
+        <ChatAvatar image={image} />
+        <div>
+          <ChatMessageHeader name={name} />
+          <ChatMessageBody message={message} />
+        </div>
+      </div>
+    );
+  }
+);
+
+ChatMessage.displayName = "ChatMessage";
+export { ChatMessage };
 
 const MessagePlaceholder = () => {
   return (

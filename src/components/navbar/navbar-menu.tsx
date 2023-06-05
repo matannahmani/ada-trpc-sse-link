@@ -10,7 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Skeleton } from "@ui/skeleton";
-import { ChatSidebarTrigger } from "@/app/chat/candidate/[id]/sidebar";
+import { ChatSidebarTrigger } from "@/app/chat/user/[userId]/candidate/[candidateId]/sidebar";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

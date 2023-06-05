@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { ChatHistorySyncer } from "./chat-history-syncer";
 import Sidebar from "./sidebar";
 import SidebarContent from "./sidebar-content";
 
@@ -7,7 +9,9 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
       <Sidebar>
         <SidebarContent />
       </Sidebar>
-
+      <Suspense fallback={null}>
+        <ChatHistorySyncer />
+      </Suspense>
       <div className="w-full lg:ml-2">{children}</div>
     </div>
   );

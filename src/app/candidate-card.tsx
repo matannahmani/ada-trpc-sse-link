@@ -21,32 +21,39 @@ import {
 } from "@/components/ui/select";
 import { AspectRatio } from "@ui/aspect-ratio";
 import Link from "next/link";
+import Image from "next/image";
 
 type CandidateCardProps = {
   candidate: Candidate;
+  userId: string;
 };
 
-const CandidateCard = ({ candidate }: CandidateCardProps) => {
+const CandidateCard = ({ candidate, userId }: CandidateCardProps) => {
   return (
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>{candidate.name}</CardTitle>
         <CardDescription>Representing {candidate.party}</CardDescription>
       </CardHeader>
-      <CardContent className="h-[180px] w-full">
-        <AspectRatio ratio={16 / 9} className="bg-muted">
-          <img
-            fetchPriority="high"
-            className="h-full w-full rounded-md object-cover"
-            src={candidate.image}
-            alt={candidate.name}
-          />
-        </AspectRatio>
+      <CardContent className="w-full">
+        <div className="h-[200px] w-[280px]">
+          <AspectRatio ratio={280 / 200} className="bg-muted">
+            <Image
+              fetchPriority="high"
+              fill
+              className="h-full w-full rounded-md object-cover"
+              src={candidate.image}
+              alt={candidate.name}
+            />
+          </AspectRatio>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="ghost">View Candidate</Button>
         <Button asChild>
-          <Link href={`/chat/candidate/${candidate.id}`}>Chat</Link>
+          <Link href={`/chat/user/${userId}/candidate/${candidate.id}`}>
+            Chat
+          </Link>
         </Button>
       </CardFooter>
     </Card>
