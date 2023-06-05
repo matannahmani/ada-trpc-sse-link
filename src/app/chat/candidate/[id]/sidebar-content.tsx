@@ -1,30 +1,58 @@
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
 import { api } from "@/trpc/server";
-import { Suspense } from "react";
+import { Suspense, memo } from "react";
 import { Skeleton } from "@ui/skeleton";
 import Link from "next/link";
 import SidebarCandidateBtn from "./sidebar-candidate-btn";
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
-async function ChatCandidateSidebar() {
+import { cache } from "react";
+import Image from "next/image";
+import { AspectRatio } from "@ui/aspect-ratio";
+
+/**
+ * @experimental trying to use rsc offical cache api
+ */
+export const getCandidates = cache(async () => {
   const candidates = await api.candidates.list.query(undefined, {});
+  return candidates;
+});
+
+const MemoedCandidateImage = memo(function CandidateImage({
+  candidate,
+}: {
+  candidate: Awaited<ReturnType<typeof getCandidates>>[number];
+}) {
+  return (
+    <div className="mr-2 h-8 w-8">
+      <AspectRatio ratio={1 / 1}>
+        <Image
+          alt={`${candidate.name} profile picture`}
+          src={candidate.image}
+          sizes="32px,32px"
+          fill
+          className="rounded-sm object-cover"
+        />
+      </AspectRatio>
+    </div>
+  );
+});
+
+async function ChatCandidateSidebar() {
+  const candidates = await getCandidates();
   return candidates?.map((candidate, i) => (
     <SidebarCandidateBtn candidateId={candidate.id} key={`btn-${i}`}>
       <Link href={`/chat/candidate/${candidate.id}`} key={`link-${i}`}>
-        <Avatar className="mr-2 h-8 w-8">
-          <AvatarImage src={candidate.image} className="object-cover" />
-          {/* <AvatarFallback>{ca ndidate.name?.toLocaleUpperCase()}</AvatarFallback> */}
-        </Avatar>
+        {/* <MemoedCandidateImage candidate={candidate} /> */}
         {candidate.name}
       </Link>
     </SidebarCandidateBtn>
   ));
 }
 
-export function SidebarContent({ className }: SidebarProps) {
+function SidebarContent({ className }: SidebarProps) {
   return (
     <div className={cn("pb-12", className)}>
       <div className="">
@@ -49,3 +77,4 @@ export function SidebarContent({ className }: SidebarProps) {
     </div>
   );
 }
+export default memo(SidebarContent);

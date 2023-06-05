@@ -1,5 +1,5 @@
 import Sidebar from "./sidebar";
-import { SidebarContent } from "./sidebar-content";
+import SidebarContent from "./sidebar-content";
 
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
   return (

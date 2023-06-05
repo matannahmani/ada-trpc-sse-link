@@ -5,6 +5,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { atom, useAtom } from "jotai";
 import { SidebarClose, SidebarOpen } from "lucide-react";
+import { memo } from "react";
 
 type SidebarProps = {
   children: React.ReactNode;
@@ -26,7 +27,6 @@ export const ChatSidebarTrigger = () => {
 
 function Sidebar(props: SidebarProps) {
   const [isOpen] = useAtom(sidebarAtom);
-
   return (
     <div className="relative">
       <div
@@ -44,4 +44,4 @@ function Sidebar(props: SidebarProps) {
   );
 }
 
-export default Sidebar;
+export default memo(Sidebar);
