@@ -76,6 +76,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
          * @return {void} - send the packet to the client
          */
         next(value) {
+          console.log("server subscription next", value);
           // https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events
           response?.write(`event:data\ndata: ${JSON.stringify(value)}\n\n`);
         },
@@ -84,21 +85,26 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
           response?.end();
         },
         complete() {
+          console.log("server subscription complete");
           response?.end("event:end\ndata: {}\n\n");
         },
       });
 
       response.on("close", () => {
+        console.error("response closed");
         subscription?.unsubscribe();
       });
       response.on("abort", () => {
+        console.error("response aborted");
         subscription?.unsubscribe();
       });
 
       request.on("close", () => {
+        console.error("request closed");
         subscription?.unsubscribe();
       });
       request.on("end", () => {
+        console.error("request ended");
         subscription?.unsubscribe();
       });
       request.on("error", () => console.error("request error"));

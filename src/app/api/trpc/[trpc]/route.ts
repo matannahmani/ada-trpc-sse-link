@@ -4,10 +4,6 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { env } from "@/env.mjs";
 import { appRouter } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
-import { type AnyProcedure } from "@trpc/server";
-import { isObservable } from "@trpc/server/observable";
-import EventSource from "eventsource";
-import { NextApiRequest, NextApiResponse } from "next";
 
 const defaultHandler = (req: Request) =>
   fetchRequestHandler({
